@@ -4,7 +4,9 @@ const Compressor = () => {
     const [images, setImages] = useState(
         {
             uploadImage: "",
-            compressImage: ""
+            uploadImageSize: 0,
+            compressImage: "",
+            compressImageSize: 0
         }
     )
 
@@ -13,11 +15,10 @@ const Compressor = () => {
         let file = e.target.files[0];
         let fileReader = new FileReader();
         fileReader.onload = (e) => {
-            setImages({ ...images, uploadImage: e.target.result })
+            setImages({ ...images, uploadImage: e.target.result, uploadImageSize: Math.round(file.size / 1000, 1) })
         }
         fileReader.readAsDataURL(file)
     }
-    console.log(images)
     // compress image =>
     const handleCompress = () => {
 
@@ -32,7 +33,7 @@ const Compressor = () => {
             <div className="compressor-left">
                 <h3>Uploaded-Image</h3>
                 <div className="upload-image-box">
-                    <img src={images.uploadImage} alt="Image not uploaded!" />
+                    <img src={images.uploadImage ? images.uploadImage : "https://www.certificate.digital/images/theme/resize/cropping.webp"} alt="Image not uploaded!" />
                 </div>
                 <div className="upload-compress-btn">
                     <button>
@@ -42,12 +43,22 @@ const Compressor = () => {
                     <button onClick={handleCompress}>Compress image</button>
                 </div>
             </div>
+            <div className="image-sizes">
+                <div className="uploaded-img-size">
+                    <p>Uploaded - {images.uploadImageSize}kb</p>
+                </div>
+                <div className="compressed-img-size">
+                    <p>Copmressed - {images.compressImageSize}kb</p>
+                </div>
+            </div>
             <div className="compressor-right">
                 <h3>Compressed-Image</h3>
                 <div className="compress-image-box">
-                    <img src={images.uploadImage} alt="No Image Found!" />
+                    <img src={images.compressImage ? "" : "https://eccentriceclectic.wordpress.com/wp-content/uploads/2014/06/waiting-time.png"} alt="No Image Found!" />
                 </div>
-                <button onClick={handleDownload}>download image</button>
+                <a href="https://eccentriceclectic.wordpress.com/wp-content/uploads/2014/06/waiting-time.png" download="https://eccentriceclectic.wordpress.com/wp-content/uploads/2014/06/waiting-time.png">
+                    <button onClick={handleDownload} >download image</button>
+                </a>
             </div>
         </div>
     )
